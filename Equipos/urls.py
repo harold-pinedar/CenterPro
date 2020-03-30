@@ -13,6 +13,3 @@ router.register('Modelo', ModelosViewSet)
 urlpatterns = router.urls
 
 
-#  [
-#     path('', include(router.urls)),
-# ]
