@@ -10,7 +10,7 @@ from Sucursal.models import Sucursal
 class OrdenesSt(models.Model):
     id_orden_st = models.BigAutoField(primary_key=True)
     id_colaborador = models.ForeignKey(Colaboradores, null=True, on_delete=models.SET_NULL)
-    cliente_documento = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL )
+    identificacion_cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL )
     notificar_otro_no = models.CharField(max_length=10, help_text="Numero Alterno")
 
     # TIPO_EQUIPOS = {
@@ -45,4 +45,34 @@ class OrdenesSt(models.Model):
 
 
     def __str__(self):
-        return self.cliente_documento
+        return self.motivo_entrada
+
+class AnularSt(models.Model):
+    id_anular_st = models.BigAutoField(primary_key=True)
+    id_orden_st = models.ForeignKey(OrdenesSt, null=True, on_delete=models.SET_NULL)
+    fecha = models.DateTimeField(auto_now_add=True)
+    id_colaborador = models.ForeignKey(Colaboradores, null=True, on_delete=models.SET_NULL)
+    observacion = models.TextField(verbose_name="Observaciones.")
+
+    def __str__(self):
+        return self.observacion
+
+class OrdenEntregadaSt(models.Model):
+    id_orden_entregada_st = models.BigAutoField(primary_key=True)
+    id_orden_st = models.ForeignKey(OrdenesSt, null=True, on_delete=models.SET_NULL)
+    fecha = models.DateField(auto_now_add=True)
+    id_colaborador = models.ForeignKey(Colaboradores,verbose_name="Nombre de quien entrega.", null=True, on_delete=models.SET_NULL)
+    quien_recibe = models.TextField(verbose_name="Nombre de quien recibe.")
+    observacion = models.TextField(verbose_name="Observaciones.")
+    def __str__(self):
+        return self.observacion
+
+class OrdenReparadaSt(models.Model):
+    id_orden_reparada_st = models.BigAutoField(primary_key=True)
+    id_orden_st = models.ForeignKey(OrdenesSt, null=True, on_delete=models.SET_NULL)
+    fecha = models.DateField(auto_now_add=True)
+    id_colaborador = models.ForeignKey(Colaboradores,verbose_name="Nombre de quien entrega.", null=True, on_delete=models.SET_NULL)
+    precio = models.DecimalField(verbose_name="Valor del servicio.",max_digits=7, decimal_places=2)
+    solucion = models.TextField(verbose_name="Solucion.")
+    def __str__(self):
+        return self.solucion
